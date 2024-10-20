@@ -22,6 +22,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # نسخ الملفات من المشروع إلى مسار العمل في الحاوية
 COPY . /var/www/html
 
+
+# تشغيل Composer لتثبيت التبعيات
+RUN composer install --no-interaction --optimize-autoloader
+
 # إعداد أذونات الملفات
 RUN chown -R www-data:www-data /var/www/html \
     && a2enmod rewrite
