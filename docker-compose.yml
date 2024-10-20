@@ -1,34 +1,3 @@
-version: '3.8'
-
-services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: laravel_app
-    ports:
-      - "8000:80"
-    volumes:
-      - .:/var/www/html
-    networks:
-      - laravel
-
-  db:
-    image: postgres:13
-    container_name: postgres
-    environment:
-      POSTGRES_DB: library_managment_jaf5
-      POSTGRES_USER: library_managment_jaf5_user
-      POSTGRES_PASSWORD: 1VD2tuXhm8uxqhZaO8nlvvPrfwpwdmFa
-    ports:
-      - "5432:5432"
-    networks:
-      - laravel
-
-networks:
-  laravel:
-    driver: bridge
-
 
 version: '3.8'
 
