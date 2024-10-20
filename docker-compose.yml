@@ -14,15 +14,14 @@ services:
       - laravel
 
   db:
-    image: mysql:5.7
-    container_name: mysql
+    image: postgres:13
+    container_name: postgres
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: library_managment
-      MYSQL_USER: root
-      MYSQL_PASSWORD:
+      POSTGRES_DB: library_managment_jaf5
+      POSTGRES_USER: library_managment_jaf5_user
+      POSTGRES_PASSWORD: 1VD2tuXhm8uxqhZaO8nlvvPrfwpwdmFa
     ports:
-      - "3306:3306"
+      - "5432:5432"
     networks:
       - laravel
 
