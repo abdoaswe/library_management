@@ -1,7 +1,5 @@
-# استخدام صورة PHP 8.1 الرسمية مع Apache
 FROM php:8.1-apache
 
-# تثبيت التبعيات الأساسية
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
@@ -12,26 +10,23 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
-    libpq-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql gd zip pdo_pgsql \
+    && docker-php-ext-install pdo pdo_mysql gd zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# تثبيت Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+ RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
 
-# نسخ الملفات من المشروع إلى مسار العمل في الحاوية
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 COPY . /var/www/html
 
-# تشغيل Composer لتثبيت التبعيات
-RUN composer install --no-interaction --optimize-autoloader --working-dir=/var/www/html
 
-# إعداد أذونات الملفات
+
+RUN composer install --no-interaction --optimize-autoloader
+
 RUN chown -R www-data:www-data /var/www/html \
     && a2enmod rewrite
 
-# إعداد DocumentRoot
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
 
-# إعداد نقطة البداية لتشغيل الحاوية
 CMD ["apache2-foreground"]
