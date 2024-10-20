@@ -20,8 +20,7 @@ class BookReportsController extends Controller
         }
 
     // Get all borrowed books with their details (book title, borrower's name, and due date)
-    $borrowedBooks = BorrowingHistory::where('user_id',$userId)
-                            ->whereNull('returned_at')
+    $borrowedBooks = BorrowingHistory::whereNotNull('returned_at')
                             ->with(['book', 'user'])
                             ->get();
 
