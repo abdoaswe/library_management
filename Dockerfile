@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql gd zip
+    && docker-php-ext-install pdo pdo_mysql gd zip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -24,6 +25,9 @@ COPY . /var/www/html
 # إعداد أذونات الملفات
 RUN chown -R www-data:www-data /var/www/html \
     && a2enmod rewrite
+
+# إعداد DocumentRoot
+RUN echo "DocumentRoot /var/www/html/public" >> /etc/apache2/apache2.conf
 
 # إعداد نقطة البداية لتشغيل الحاوية
 CMD ["apache2-foreground"]
