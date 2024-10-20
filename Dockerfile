@@ -27,7 +27,7 @@ RUN chown -R www-data:www-data /var/www/html \
     && a2enmod rewrite
 
 # إعداد DocumentRoot
-RUN echo "DocumentRoot /var/www/html/public" >> /etc/apache2/apache2.conf
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
 
 # إعداد نقطة البداية لتشغيل الحاوية
 CMD ["apache2-foreground"]
